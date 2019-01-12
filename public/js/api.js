@@ -9,45 +9,45 @@ function formatParams(params) {
 }
 
 // params is given as a JSON
-function get(endpoint, params, successCallback, failureCallback) {
-  const xhr = new XMLHttpRequest();
-  const fullPath = endpoint + '?' + formatParams(params);
-  xhr.open('GET', fullPath, true);
-  xhr.onload = function(err) {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        if (successCallback)
-          successCallback(JSON.parse(xhr.responseText));
-      } else {
-        if (failureCallback)
-        failureCallback(xhr.statusText);
+function get(endpoint, params) {
+  return new Promise(function(resolve, reject) {
+    const xhr = new XMLHttpRequest();
+    const fullPath = endpoint + '?' + formatParams(params);
+    xhr.open('GET', fullPath, true);
+    xhr.onload = function(err) {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(xhr.statusText);
+        }
       }
+    };
+    xhr.onerror = function(err) {
+      reject(xhr.statusText);
     }
-  };
-  xhr.onerror = function(err) {
-    failureCallback(xhr.statusText);
-  }
-  xhr.send(null);
+    xhr.send(null);
+  });
 }
 
-function post(endpoint, params, successCallback, failureCallback) {
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', endpoint, true);
-  xhr.setRequestHeader('Content-type', 'application/json');
-  xhr.withCredentials = true;
-  xhr.onload = function(err) {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        if (successCallback)
-          successCallback(JSON.parse(xhr.responseText));
-      } else {
-        if (failureCallback)
-          failureCallback(xhr.statusText);
+function post(endpoint, params) {
+  return new Promise(function(resolve, reject) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', endpoint, true);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.withCredentials = true;
+    xhr.onload = function(err) {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(xhr.statusText);
+        }
       }
-    }
-  };
-  xhr.onerror = function(err) {
-    reject(xhr.statusText);
-  };
-  xhr.send(JSON.stringify(params));
+    };
+    xhr.onerror = function(err) {
+      reject(xhr.statusText);
+    };
+    xhr.send(JSON.stringify(params));
+  });
 }
