@@ -10,44 +10,14 @@ function formatParams(params) {
 
 // params is given as a JSON
 function get(endpoint, params) {
-  return new Promise(function(resolve, reject) {
-    const xhr = new XMLHttpRequest();
-    const fullPath = endpoint + '?' + formatParams(params);
-    xhr.open('GET', fullPath, true);
-    xhr.onload = function(err) {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          resolve(JSON.parse(xhr.responseText));
-        } else {
-          reject(xhr.statusText);
-        }
-      }
-    };
-    xhr.onerror = function(err) {
-      reject(xhr.statusText);
-    }
-    xhr.send(null);
-  });
+  const fullPath = endpoint + "?" + formatParams(params);
+  return fetch(fullPath).then(res => res.json());
 }
 
 function post(endpoint, params) {
-  return new Promise(function(resolve, reject) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', endpoint, true);
-    xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.withCredentials = true;
-    xhr.onload = function(err) {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          resolve(JSON.parse(xhr.responseText));
-        } else {
-          reject(xhr.statusText);
-        }
-      }
-    };
-    xhr.onerror = function(err) {
-      reject(xhr.statusText);
-    };
-    xhr.send(JSON.stringify(params));
-  });
+  return fetch(endpoint, {
+    method: 'post',
+    headers: {'Content-type': 'application/json'},
+    body: JSON.stringify(params)
+  }).then(res => res.json());
 }
