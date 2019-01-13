@@ -136,20 +136,20 @@ function renderStories(user) {
     document.getElementById('new-story').appendChild(newStoryDOMObject());
 
   const storiesDiv = document.getElementById('stories');
-  get('/api/stories', {}).then(function(stories) {
-    stories.forEach(function(story) {
+  get('/api/stories', {}).then((stories) => {
+    for (const story of stories) {
       storiesDiv.prepend(storyDOMObject(story, user));
-    });
+    }
 
     // Fire GET /api/comment for every story
     return Promise.all(stories.map(story => get('/api/comment', {'parent': story._id})));
-  }).then(function(requests) {
+  }).then((responses) => {
     // Callback when all comment requests are completed
-    requests.forEach(function(comments) {
-      comments.forEach(function(comment) {
+    for (const res of responses) { // each 'res' is an array of comments
+      for (const comment of res) {
         const commentDiv = document.getElementById(comment.parent + '-comments');
         commentDiv.appendChild(commentDOMObject(comment));
-      });
-    });
+      }
+    }
   });
 }
