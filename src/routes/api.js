@@ -22,13 +22,13 @@ router.get('/whoami', function(req, res) {
 
 
 router.get('/user', function(req, res) {
-  User.findOne({ _id: req.query._id }, function(err, user) {
+  User.findOne({ _id: req.query._id }).then(user => {
     res.send(user);
   });
 });
 
 router.get('/stories', function(req, res) {
-  Story.find({}, function(err, stories) {
+  Story.find({}).then(stories => {
     res.send(stories);
   });
 });
@@ -43,26 +43,31 @@ router.post(
       'content': req.body.content,
     });
 
-    newStory.save(function(err, story) {
-      if (err) console.log(err);
+    newStory.save()
+      .then(story => {
+        const io = req.app.get('socketio');
+        io.emit('story', story);
 
-      User.findOne({ _id: req.user._id },function(err, user) {
+        // Chain a new promise to find user
+        return User.findOne({_id: req.user._id});
+      })
+      .then(user => {
         user.last_post = req.body.content;
         user.save(); 
+      })
+      .catch(err => {
+        // An error occurred!
+        console.log(err);
       });
-
-			const io = req.app.get('socketio');
-			io.emit('story', story);
-    });
-
+    
     res.send({});
   }
 );
 
 router.get('/comment', function(req, res) {
-  Comment.find({ parent: req.query.parent }, function(err, comments) {
+  Comment.find({ parent: req.query.parent }).then(comments => {
     res.send(comments);
-  })
+  });
 });
 
 router.post(
@@ -76,11 +81,11 @@ router.post(
       'content': req.body.content,
     });
 
-    newComment.save(function(err, comment) {
-      if (err) console.log(err);
-
+    newComment.save().then(comment => {
       const io = req.app.get('socketio');
       io.emit("comment", comment);
+    }).catch(err => {
+      console.log(err);
     });
 
     res.send({});
