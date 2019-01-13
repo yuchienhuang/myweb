@@ -78,6 +78,11 @@ const server = http.Server(app);
 const io = socketio(server);
 app.set('socketio', io);
 
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
+
+
 server.listen(port, function() {
   console.log('Server running on port: ' + port);
 });
