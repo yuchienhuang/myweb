@@ -1,9 +1,9 @@
 function main() {
   const profileId = window.location.search.substring(1);
-  get('/api/user', {'_id': profileId}, function(profileUser) {
+  get('/api/user', {'_id': profileId}).then(profileUser => {
     renderUserData(profileUser);
   });
-  get('/api/whoami', {}, function(user) {
+  get('/api/whoami', {}).then(user => {
     renderNavbar(user);
   });
 }
