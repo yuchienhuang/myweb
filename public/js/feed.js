@@ -136,14 +136,14 @@ function renderStories(user) {
     document.getElementById('new-story').appendChild(newStoryDOMObject());
 
   const storiesDiv = document.getElementById('stories');
-  get('/api/stories', {}).then((stories) => {
+  get('/api/stories', {}).then(stories => {
     for (const story of stories) {
       storiesDiv.prepend(storyDOMObject(story, user));
     }
 
     // Fire GET /api/comment for every story
     return Promise.all(stories.map(story => get('/api/comment', {'parent': story._id})));
-  }).then((responses) => {
+  }).then(responses => {
     // Callback when all comment requests are completed
     for (const res of responses) { // each 'res' is an array of comments
       for (const comment of res) {
