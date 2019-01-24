@@ -57,3 +57,36 @@ div.circle-avatar{
 .large-profile-container {
 	padding: 0 35%;
 }
+
+  .flex.container{
+	display: flex;
+	justify-content: center;
+	background-color: #343a40;
+  }
+
+  .image-replacement {
+	display: block;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background: url(http://akamaicovers.oreilly.com/images/9780596517748/cat.gif) no-repeat;
+	width: 180px;
+	height: 236px;
+	padding-left: 180px;
+  }
+
+
+  #box {
+	background-color: #343a40
+	width: 300px;
+	border: 0px;
+	padding: 25px;
+	margin: 10px;
+  }
+
+  #navbox {
+	background-color: #343a40
+	width: 300px;
+	border: 0px;
+	padding: 25px;
+	margin: 10px;
+  }

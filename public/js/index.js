@@ -1,8 +1,13 @@
 function main() {
   get('/api/whoami', {}).then(function(user) {
     console.log(user);
-    renderNavbar(user);
+    // renderNavbar(user);
     renderStories(user);
+    renderNavbarList(user);
+
+    
+    
+
 
     const socket = io();
     socket.on('story', function(story) {

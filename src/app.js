@@ -1,3 +1,6 @@
+// dotenv
+const dotenv = require('dotenv').config();
+
 // libraries
 const http = require('http');
 const bodyParser = require('body-parser');
@@ -71,7 +74,9 @@ app.use(function(err, req, res, next) {
 });
 
 // port config
-const port = 3000; // config variable
+// config variable
+const port = (process.env.PORT || 3000); //const port = 3000; 
+
 const server = http.Server(app);
 
 //configure socket.io

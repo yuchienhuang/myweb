@@ -4,7 +4,8 @@ function main() {
     renderUserData(profileUser);
   });
   get('/api/whoami', {}).then(user => {
-    renderNavbar(user);
+    //  renderNavbar(user);
+     renderNavbarList(user);
   });
 }
 
